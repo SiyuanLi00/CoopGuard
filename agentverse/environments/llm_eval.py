@@ -26,6 +26,8 @@ class LLMEvalEnvironment(BasicEnvironment):
         # Generate current environment description
         env_descriptions = self.rule.get_env_description(self)
 
+       
+        print("这是在环境加载中的agent：(environments/llm_eval.py)",agent_ids)
         # Generate the next message
         messages = await asyncio.gather(
             *[self.agents[i].astep(self, env_descriptions[i]) for i in agent_ids]

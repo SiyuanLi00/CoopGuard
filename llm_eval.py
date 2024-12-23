@@ -1,6 +1,6 @@
 import os
-os.environ["OPENAI_API_KEY"] = "***"
-os.environ["OPENAI_BASE_URL"] = "***"
+os.environ["OPENAI_API_KEY"] = "hk-c79ab8100004794135ced3f778d28cbb714267049bd2ad89"
+os.environ["OPENAI_BASE_URL"] = "https://api.openai-hk.com/v1"
 
 # always remember to put these lines at the top of your code if you are using clash
 # os.environ["http_proxy"] = "http://127.0.0.1:7890"

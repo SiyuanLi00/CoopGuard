@@ -24,9 +24,9 @@ class LLMEvalAgent(BaseAgent):
     reference_text: str = ""
     generated_text: str = ""
 
-    # for pair comparison
-    compared_text_one: str = ""
-    compared_text_two: str = ""
+    # # for pair comparison
+    # compared_text_one: str = ""
+    # compared_text_two: str = ""
 
     final_prompt: str = ""
     final_prompt_to_use: str = ""
@@ -48,7 +48,7 @@ class LLMEvalAgent(BaseAgent):
                 continue
 
         if parsed_response is None:
-            logging.error(f"{self.name} failed to generate valid response.")
+            logging.error(f"{self.name} failed to generate valid response.(step)")
 
         message = Message(
             content=""
@@ -61,7 +61,6 @@ class LLMEvalAgent(BaseAgent):
 
     async def astep(self, env: BaseEnvironment = None, env_description: str = "") -> Message:
         """Asynchronous version of step"""
-
         # TODO modify this line, if it is the final round, add some instruction in the prompt
         # you must use the following format, first give the rate of the summary of the above 4 aspects then finally give the reasoning on why you give this rate
         # Relevance:
@@ -69,8 +68,18 @@ class LLMEvalAgent(BaseAgent):
         # Fluency:
         # Coherence:
         # Thought: (your thought)
+        
+        # Ensure `env` and `env.agents` are valid
+        if env is None:
+            logging.error("Environment is None.")
+            return Message(content="Invalid environment.", sender=self.name, receiver=self.get_receiver())
+        
+        if len(env.agents) == 0:
+            logging.error("Agents list is empty.")
+            return Message(content="No agents found.", sender=self.name, receiver=self.get_receiver())
 
-        if env.cnt_turn >= env.max_turns - len(env.agents):
+        #最后一轮的取证总结应该如何去设置环境是个问题。
+        # if env.cnt_turn >= env.max_turns - len(env.agents):
             # self.final_prompt = "Now, please give your final judgement, and you must use the following format, first start with 'This is my final judgement!' and briefly give the thought on why you give this rate, then finally give the rate of the summary of the above 4 aspects." \
             #                     "This is my final judgement!\n" \
             #                     "Thought: (your thought)\n" \
@@ -78,9 +87,12 @@ class LLMEvalAgent(BaseAgent):
             #                     "Consistency:\n" \
             #                     "Fluency:\n" \
             #                     "Coherence:\n" \
-            self.final_prompt = self.final_prompt_to_use
+        self.final_prompt = self.final_prompt_to_use
+
+    
 
         prompt = self._fill_prompt_template(env_description)
+        print("最终提示词(llm_eval_multi_agent.py)：",prompt)
 
         parsed_response = None
 
@@ -90,12 +102,17 @@ class LLMEvalAgent(BaseAgent):
             for i in range(self.max_retry):
                 try:
                     response = await self.llm.agenerate_response(prompt, self.memory.messages, self.final_prompt)
+                    print("异步环境中的response",response)
                     parsed_response = self.output_parser.parse(response, env.cnt_turn, env.max_turns, len(env.agents))
+                    print("异步环境中的解析响应：",parsed_response)
                     should_break = True
                     break
                 except (KeyboardInterrupt, bdb.BdbQuit):
                     raise
                 except Exception as e:
+                    print("具体异常信息",e)
+                    logging.error(f"异常类型: {type(e).__name__}")  # 打印异常类型
+
                     if isinstance(e, RateLimitError):
                         logging.error(e)
                         logging.warning("Retrying Until rate limit error disappear...")
@@ -113,7 +130,7 @@ class LLMEvalAgent(BaseAgent):
                 continue
 
         if parsed_response is None:
-            logging.error(f"{self.name} failed to generate valid response.")
+            logging.error(f"{self.name} failed to generate valid response.(astep)")
 
         message = Message(
             content=""
@@ -140,10 +157,10 @@ class LLMEvalAgent(BaseAgent):
             "source_text": self.source_text,
             "reference_text": self.reference_text,
             "generated_text": self.generated_text,
-            "compared_text_one": self.compared_text_one,
-            "compared_text_two": self.compared_text_two,
+            # "compared_text_one": self.compared_text_one,
+            # "compared_text_two": self.compared_text_two,
             "final_prompt": self.final_prompt,
-            # "chat_history": self.memory.to_string(add_sender_prefix=True),
+            #"chat_history": self.memory.to_string(add_sender_prefix=True),
         }
         return Template(self.prompt_template).safe_substitute(input_arguments)
 
