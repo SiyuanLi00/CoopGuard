@@ -1,7 +1,7 @@
-CoopGuard : Cooperative Agents Safeguarding LLMs Against Evolving Adversarial Attacks
+CoopGuard : Stateful Cooperative Agents Safeguarding LLMs Against Evolving Multi-Round Attacks
 ---
 
-**HoneyTrap** is a defense framework designed to mitigate Jailbreak attacks on LLMs through collaborative multi-agent systems. By leveraging a set of specialized agents—including Deferring Agent, Tempting Agent, System Coordinator, and Forensic Agent—HoneyTrap deceives attackers into wasting their resources, while maintaining robust security measures. The framework strategically delays attacker inputs, misguides them with deceptive responses, and monitors their behaviors, ultimately collecting critical evidence for forensic analysis. This innovative approach employs the concept of "Honeypot" making attackers believe they have breached the system, while they are, in fact, being trapped in a time-wasting loop. HoneyTrap aims to provide a scalable, collaborative defense mechanism against evolving jailbreak strategies, ensuring LLMs remain secure and resilient in adversarial environments.
+As large language models (LLMs) are increasinglydeployed in complex applications, their vulnera-bility to adversarial attacks raises urgent safetyconcerns, especially the attacks that evolve overmulti-round interactions. Existing defenses arelargely reactive and struggle to adapt when ad-versaries continuously refine their strategies acrossrounds. In this work, we propose CoopGuard,a stateful multi-round LLM defense frameworkbased on cooperative agents for adversarial at-tacks across evolving interactions. CoopGuard em-ploys three specialized agents (Deferring Agent,Tempting Agent, and Forensic Agent) that respec-tively execute a specialized defense strategy at eachround, while a coordinating System Agent adap-tively orchestrates their behaviors using interac-tion history. To enable systematic evaluation un-der evolving threats, we introduce the EMRA bench-mark, containing 5,200 adversarial samples across8 attack types, designed to simulate progressivelyescalating multi-round attacks. Experiments showthat CoopGuard reduces the overall attack suc-cess rate by 78.9%o compared to state-of-the-art de-fenses, while improving deceptive rate by 186%and reducing attack efficiency by 167.9%o, offeringa deeper and more detailed assessment of defenseeffectiveness. These results demonstrate that co-operative, stateful defense can provide robust pro-tection for LLMs in dynamic adversarial environ-ments.
 
 ## Getting Started
 
@@ -9,8 +9,8 @@ CoopGuard : Cooperative Agents Safeguarding LLMs Against Evolving Adversarial At
 
 First, clone our latest repository
 ```bash
-git clone https://github.com/siyuanll/JailbreakHoneypot.git
-cd JailbreakHoneypot
+git clone https://github.com/xxx
+cd xxx
 pip install -r requirements.txt
 ```
 
@@ -26,10 +26,10 @@ import os
 os.environ["OPENAI_API_KEY"] = "your_api_key_here"
 ```
 
-### Run HoneyTrap
+### Run
 
 ```shell
-python honeytrap.py --config agentverse/tasks/honeytrap/config.yaml
+python coopguard.py --config agentverse/tasks/coopguard/config.yaml
 ```
 
 ## Experiment
@@ -54,7 +54,7 @@ python statistics.py
 
 You can find our multi round jailbreak attack dataset in `dataset` folder.
 
-The dataset used in HoneyTrap is designed to simulate the progressive escalation of Jailbreak attacks against large language models (LLMs). It includes a diverse set of harmful prompts, which attackers use to attempt to bypass security mechanisms and "break" the model. The dataset is organized into several key fields: `question`, `target`, `Rephrased_Question`, and `Jailbreak_question`. Each entry represents a distinct attack stage, with the `question` field containing an initial harmful query, while `target` provides the model's expected secure response. The `Rephrased_Question` reflects a variation of the original query, intended to evade detection, and the `Jailbreak_question` shows a refined attack using specific Jailbreak strategies such as "universal-attack," "multi-roleplaying," and "single-roleplaying." The dataset is structured to simulate multi-round interactions between attackers and the LLM, progressively increasing the sophistication and intensity of the attacks. It is crucial for training and testing the defense mechanisms in HoneyTrap, allowing us to evaluate how effectively our multi-agent system can handle evolving attack strategies.
+The dataset used is designed to simulate the progressive escalation of Jailbreak attacks against large language models (LLMs). It includes a diverse set of harmful prompts, which attackers use to attempt to bypass security mechanisms and "break" the model. The dataset is organized into several key fields: `question`, `target`, `Rephrased_Question`, and `Jailbreak_question`. Each entry represents a distinct attack stage, with the `question` field containing an initial harmful query, while `target` provides the model's expected secure response. The `Rephrased_Question` reflects a variation of the original query, intended to evade detection, and the `Jailbreak_question` shows a refined attack using specific Jailbreak strategies such as "universal-attack," "multi-roleplaying," and "single-roleplaying." The dataset is structured to simulate multi-round interactions between attackers and the LLM, progressively increasing the sophistication and intensity of the attacks. It is crucial for training and testing the defense mechanisms, allowing us to evaluate how effectively our multi-agent system can handle evolving attack strategies.
 
 
 ## Citation
