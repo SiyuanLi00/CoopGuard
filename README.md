@@ -29,7 +29,7 @@ os.environ["OPENAI_API_KEY"] = "your_api_key_here"
 ### Run
 
 ```shell
-python coopguard.py --config agentverse/tasks/coopguard/config.yaml
+python CoopGuard.py --config agentverse/tasks/coopguard/config.yaml
 ```
 
 ## Experiment
