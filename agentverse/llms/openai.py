@@ -82,7 +82,8 @@ class OpenAICompletion(BaseCompletionModel):
             recv_tokens=response.usage.completion_tokens,
             total_tokens=response.usage.total_tokens,
         )
-
+@llm_registry.register("gemini-pro")
+@llm_registry.register("claude-3-sonnet-20240229")
 @llm_registry.register("gpt-3.5-turbo-0301")
 @llm_registry.register("gpt-3.5-turbo")
 @llm_registry.register("gpt-4")
@@ -113,7 +114,7 @@ class OpenAIChat(BaseChatModel):
         messages = self._construct_messages(prompt, chat_memory, final_prompt)
         try:
             if openai.api_type == "azure":
-                response = client.chat.completions.create(engine="gpt-4-6", messages=messages, **self.args.dict())
+                response = client.chat.completions.create(engine="gpt-4", messages=messages, **self.args.dict())
             else:
 
 
@@ -132,7 +133,7 @@ class OpenAIChat(BaseChatModel):
         messages = self._construct_messages(prompt, chat_memory, final_prompt)
         try:
             if openai.api_type == "azure":
-                response = await aclient.chat.completions.create(engine="gpt-4-6", messages=messages, **self.args.dict())
+                response = await aclient.chat.completions.create(engine="gpt-4", messages=messages, **self.args.dict())
             else:
 
                 response = await aclient.chat.completions.create(messages=messages, **self.args.dict())

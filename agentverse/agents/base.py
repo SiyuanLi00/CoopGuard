@@ -18,7 +18,7 @@ class BaseAgent(BaseModel):
     role_description: str = Field(default="")
     memory: BaseMemory = Field(default_factory=ChatHistoryMemory)
     memory_manipulator: BaseMemoryManipulator = Field(default_factory=BaseMemoryManipulator)
-    max_retry: int = Field(default=3)
+    max_retry: int = Field(default=1)
     receiver: Set[str] = Field(default=set({"all"}))
     async_mode: bool = Field(default=True)
     manipulated_memory: str = None

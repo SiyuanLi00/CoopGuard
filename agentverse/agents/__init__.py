@@ -6,6 +6,6 @@ agent_registry = Registry(name="AgentRegistry")
 from .base import BaseAgent
 from .conversation_agent import ConversationAgent
 
-from .llm_eval_agent import LLMEvalAgent
-from .llm_eval_multi_agent import LLMEvalAgent
-from .llm_eval_multi_agent_con import LLMEvalAgent
+from .coopguard_agent import CoopGuardAgent
+from .coopguard_multi_agent import CoopGuardAgent
+from .coopguard_multi_agent_con import CoopGuardAgent
